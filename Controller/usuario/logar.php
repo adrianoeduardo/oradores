@@ -24,7 +24,7 @@ if ($response == "erro"){
     $_SESSION['logado'] = true;
     $_SESSION['nome'] = $response[0]['vc_nome'];
     $_SESSION['usuario']= $response[0]['vc_login'];
-    $_SESSION['token'] = $response[0]['vc_token'];
+    //$_SESSION['token'] = $response[0]['vc_token'];
     $_SESSION['email']= $response[0]['vc_email'];
 }
 //print_r($_SESSION);

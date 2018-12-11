@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../lib/Facebook/autoload.php';
-require_once '../../Model/Usuario.php';
+/*require_once '../../Model/Usuario.php';*/
 require_once '../headers.php';
 $headers = new Headers;
 header("Access-Control-Allow-Headers: Content-Type");
@@ -14,7 +14,27 @@ $fb = new Facebook\Facebook([
 ]);
 $helper = $fb->getRedirectLoginHelper();
 $permissions = ['email']; // Optional permissions
+try {
+    if(isset($_SESSION['face_access_token'])){
+          $accessToken = $_SESSION['face_access_token'];
+      }else{
+          $accessToken = $helper->getAccessToken();
+      }
+  } catch(Facebook\Exceptions\FacebookResponseException $e) {
+    // When Graph returns an error
+    echo 'Graph returned an error: ' . $e->getMessage();
+    exit;
+  } catch(Facebook\Exceptions\FacebookSDKException $e) {
+    // When validation fails or other local issues
+    echo 'Facebook SDK returned an error: ' . $e->getMessage();
+    exit;
+  }
+$loginUrl = $helper->getLoginUrl('http://localhost/projeto-oradores/Controller/usuario/faceCallback.php', $permissions);
 
+//echo '<a href="' . htmlspecialchars($loginUrl) . '">Log in with Facebook!</a>';
+echo json_encode($loginUrl);
+
+/*
 try {
 	if(isset($_SESSION['face_access_token'])){
 		$accessToken = $_SESSION['face_access_token'];
@@ -69,4 +89,4 @@ if (! isset($accessToken)) {
 	exit;
     }
     header('Location: http://localhost:4200/login');
-}
+}*/
